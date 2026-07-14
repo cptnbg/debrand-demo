@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debrand — stop paying for the logo</title>
+<meta name="description" content="Most brands don't make anything. Debrand finds the same unbranded product, honestly priced, and links you straight to it.">
+<meta property="og:title" content="Debrand — stop paying for the logo">
+<meta property="og:description" content="Find the unbranded equivalent of branded products and keep the difference.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F3F7;</text></svg>">
+<style>
+  html,body{margin:0;padding:0;}
+  *{-webkit-tap-highlight-color:transparent;}
+  body{background:#EFF5EE;}
+  @media (prefers-color-scheme:dark){ body{background:#08110C;} }
+</style>
+</head>
+<body>
+<style>
+  .dz{
+    --paper:#EFF5EE; --panel:#FFFFFF; --panel-2:#F0F5EF;
+    --ink:#08130D; --muted:#5A6B60; --hairline:#DEE7DC;
+    --green:#0E9E63; --green-strong:#0A7A4C; --green-deep:#065234;
+    --green-soft:#E4F4EB; --lime:#38D07E;
+    --alert:#C24632;
+    --shadow:0 1px 2px rgba(8,19,13,.05), 0 12px 32px rgba(8,19,13,.07);
+    --shadow-lg:0 26px 64px rgba(8,19,13,.17);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Monaco,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    .dz{ --paper:#08110C; --panel:#101B14; --panel-2:#0C160F;
+      --ink:#E9F1EA; --muted:#93A398; --hairline:#213026;
+      --green:#2BD588; --green-strong:#4FE39E; --green-deep:#8CF0C0; --green-soft:#0F2A1C; --lime:#48E896;
+      --alert:#F0785F;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.45); --shadow-lg:0 26px 64px rgba(0,0,0,.55); }
+  }
+  :root[data-theme="light"] .dz{
+    --paper:#EFF5EE; --panel:#FFFFFF; --panel-2:#F0F5EF; --ink:#08130D; --muted:#5A6B60; --hairline:#DEE7DC;
+    --green:#0E9E63; --green-strong:#0A7A4C; --green-deep:#065234; --green-soft:#E4F4EB; --lime:#38D07E; --alert:#C24632;
+    --shadow:0 1px 2px rgba(8,19,13,.05),0 12px 32px rgba(8,19,13,.07); --shadow-lg:0 26px 64px rgba(8,19,13,.17); }
+  :root[data-theme="dark"] .dz{
+    --paper:#08110C; --panel:#101B14; --panel-2:#0C160F; --ink:#E9F1EA; --muted:#93A398; --hairline:#213026;
+    --green:#2BD588; --green-strong:#4FE39E; --green-deep:#8CF0C0; --green-soft:#0F2A1C; --lime:#48E896; --alert:#F0785F;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.45); --shadow-lg:0 26px 64px rgba(0,0,0,.55); }
+
+  *{box-sizing:border-box;}
+  .dz{ background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased; min-height:100vh; }
+  .dz .mono{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+  .dz .wrap{ max-width:1160px; margin:0 auto; padding:0 clamp(16px,3.4vw,34px); }
+  .dz a{ color:inherit; }
+
+  /* Topbar */
+  .dz .topbar{ position:sticky; top:0; z-index:40; background:color-mix(in srgb,var(--paper) 85%,transparent);
+    backdrop-filter:saturate(1.3) blur(10px); border-bottom:1px solid var(--hairline); }
+  .dz .topbar .wrap{ display:flex; align-items:center; gap:16px; height:62px; }
+  .dz .logo{ font-weight:850; font-size:21px; letter-spacing:-.035em; display:flex; align-items:center; gap:8px; flex:none; }
+  .dz .logo .tag{ width:22px; height:22px; color:var(--green); }
+  .dz .searchbar{ flex:1; display:flex; align-items:center; gap:9px; background:var(--panel); border:1px solid var(--hairline);
+    border-radius:12px; padding:10px 14px; box-shadow:var(--shadow); max-width:440px; }
+  .dz .searchbar svg{ flex:none; color:var(--muted); }
+  .dz .searchbar input{ border:0; outline:0; background:transparent; color:var(--ink); font:inherit; font-size:14px; width:100%; }
+  .dz .searchbar input::placeholder{ color:var(--muted); }
+  .dz .topcta{ flex:none; font:inherit; font-size:13px; font-weight:700; color:#04150C; background:var(--green);
+    border:0; border-radius:11px; padding:10px 16px; cursor:pointer; }
+  .dz .topcta:hover{ background:var(--green-strong); }
+  .dz button:focus-visible, .dz a:focus-visible, .dz input:focus-visible{ outline:2px solid var(--green); outline-offset:2px; border-radius:6px; }
+  @media(max-width:680px){ .dz .topcta{ display:none; } .dz .searchbar{ max-width:none; } }
+
+  /* Hero */
+  .dz .hero{ padding:clamp(38px,6vw,72px) 0 clamp(20px,3vw,30px); }
+  .dz .hero-grid{ display:grid; grid-template-columns:1.02fr .98fr; gap:clamp(26px,4.5vw,56px); align-items:center; }
+  @media(max-width:880px){ .dz .hero-grid{ grid-template-columns:1fr; } }
+  .dz .eyebrow{ font-size:11.5px; letter-spacing:.17em; text-transform:uppercase; color:var(--green-strong); font-weight:800; margin:0 0 16px; }
+  .dz h1{ font-size:clamp(38px,6.2vw,66px); line-height:.98; letter-spacing:-.04em; font-weight:880; margin:0; text-wrap:balance; }
+  .dz h1 .u{ color:var(--green); position:relative; white-space:nowrap; }
+  .dz .lede{ font-size:clamp(15px,1.7vw,18px); color:var(--muted); margin:22px 0 0; max-width:44ch; }
+  .dz .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:26px; align-items:center; }
+  .dz .chips .lbl{ font-size:12px; color:var(--muted); margin-right:2px; font-weight:600; }
+  .dz .chip{ font:inherit; font-size:13px; font-weight:600; cursor:pointer; background:var(--panel); color:var(--ink);
+    border:1px solid var(--hairline); border-radius:20px; padding:7px 13px; transition:.13s; }
+  .dz .chip:hover{ border-color:var(--green); transform:translateY(-1px); color:var(--green-strong); }
+
+  /* Hero reveal card */
+  .dz .reveal{ background:var(--panel); border:1px solid var(--hairline); border-radius:22px; box-shadow:var(--shadow-lg); padding:26px; position:relative; overflow:hidden; }
+  .dz .reveal::before{ content:""; position:absolute; inset:0 0 auto 0; height:5px; background:linear-gradient(90deg,var(--green),var(--lime)); }
+  .dz .reveal .tagrow{ display:flex; justify-content:space-between; align-items:center; margin:6px 0 16px; }
+  .dz .prod-ico{ width:54px; height:54px; border-radius:15px; background:var(--panel-2); display:grid; place-items:center; color:var(--ink); }
+  .dz .prod-ico svg{ width:28px; height:28px; }
+  .dz .stamp{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; color:var(--green-strong);
+    background:var(--green-soft); border-radius:20px; padding:6px 12px; }
+  .dz .stamp .dotk{ width:7px; height:7px; border-radius:50%; background:var(--green); }
+  .dz .reveal .pname{ font-size:13.5px; color:var(--muted); margin:0 0 3px; font-weight:600; }
+  .dz .reveal .ptitle{ font-size:20px; font-weight:780; letter-spacing:-.02em; margin:0 0 20px; }
+  .dz .priceflip{ display:flex; align-items:flex-end; gap:18px; }
+  .dz .pcol .cap{ font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); margin:0 0 5px; font-weight:700; }
+  .dz .pbrand{ font-size:26px; font-weight:750; letter-spacing:-.02em; color:var(--muted); position:relative; display:inline-block; }
+  .dz .pbrand.struck::after{ content:""; position:absolute; left:-3px; right:-3px; top:52%; height:3px; background:var(--alert);
+    transform:scaleX(0); transform-origin:left; transition:transform .45s ease; border-radius:2px; }
+  .dz .reveal.done .pbrand.struck::after{ transform:scaleX(1); }
+  .dz .pun{ font-size:40px; font-weight:880; letter-spacing:-.03em; color:var(--green); line-height:1; opacity:0; transform:translateY(8px); transition:opacity .5s .15s,transform .5s .15s; }
+  .dz .reveal.done .pun{ opacity:1; transform:none; }
+  .dz .arrow{ color:var(--muted); font-size:20px; padding-bottom:6px; }
+  .dz .saveline{ margin-top:20px; display:flex; align-items:center; gap:12px; opacity:0; transition:opacity .4s .3s; }
+  .dz .reveal.done .saveline{ opacity:1; }
+  .dz .saveseal{ display:inline-flex; flex-direction:column; align-items:center; justify-content:center; background:var(--green); color:#04150C;
+    border-radius:14px; padding:10px 16px; font-weight:850; line-height:1; box-shadow:0 6px 16px color-mix(in srgb,var(--green) 40%,transparent); }
+  .dz .saveseal .big{ font-size:24px; letter-spacing:-.02em; }
+  .dz .saveseal .lil{ font-size:10px; letter-spacing:.12em; text-transform:uppercase; margin-top:4px; opacity:.85; }
+  .dz .saveline .txt{ font-size:13.5px; color:var(--muted); }
+  .dz .revealbtn{ margin-top:20px; width:100%; font:inherit; font-size:14.5px; font-weight:750; color:#04150C; background:var(--green);
+    border:0; border-radius:13px; padding:14px; cursor:pointer; transition:.15s; }
+  .dz .revealbtn:hover{ background:var(--green-strong); }
+  .dz .reveal.done .revealbtn{ display:none; }
+
+  /* Brand-tax stat band */
+  .dz .statband{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:1px; background:var(--hairline);
+    border:1px solid var(--hairline); border-radius:16px; overflow:hidden; margin:8px 0 6px; }
+  @media(max-width:680px){ .dz .statband{ grid-template-columns:1fr; } }
+  .dz .stat{ background:var(--panel); padding:18px 20px; }
+  .dz .stat .n{ font-size:clamp(24px,3.2vw,32px); font-weight:850; letter-spacing:-.03em; color:var(--green-strong); }
+  .dz .stat .l{ font-size:12px; color:var(--muted); margin-top:3px; }
+  .dz .stat.lead .n{ color:var(--ink); }
+  .dz .stat.lead .n em{ color:var(--green); font-style:normal; }
+
+  /* Trust strip */
+  .dz .trust{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:26px 0 8px; }
+  @media(max-width:680px){ .dz .trust{ grid-template-columns:1fr; } }
+  .dz .tcard{ display:flex; gap:11px; align-items:flex-start; padding:15px 16px; background:var(--panel); border:1px solid var(--hairline); border-radius:14px; }
+  .dz .tcard svg{ color:var(--green); flex:none; margin-top:1px; }
+  .dz .tcard b{ display:block; font-size:13.5px; margin-bottom:2px; }
+  .dz .tcard span{ font-size:12.5px; color:var(--muted); }
+
+  /* Catalog controls */
+  .dz .cat-head{ display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; justify-content:space-between; margin:44px 0 20px; }
+  .dz .cat-head h2{ font-size:clamp(21px,2.8vw,28px); font-weight:820; letter-spacing:-.03em; margin:0; }
+  .dz .cat-head h2 span{ color:var(--muted); font-weight:600; font-size:.6em; margin-left:8px; letter-spacing:-.01em; }
+  .dz .toolbar{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .dz .filters{ display:flex; flex-wrap:wrap; gap:7px; }
+  .dz .fbtn{ font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; background:transparent; color:var(--muted);
+    border:1px solid var(--hairline); border-radius:20px; padding:6px 12px; transition:.13s; }
+  .dz .fbtn:hover{ color:var(--ink); border-color:var(--muted); }
+  .dz .fbtn[aria-pressed="true"]{ background:var(--green); color:#04150C; border-color:var(--green); }
+  .dz .sortsel{ font:inherit; font-size:12.5px; color:var(--ink); background:var(--panel); border:1px solid var(--hairline); border-radius:20px; padding:6px 12px; cursor:pointer; }
+
+  /* Grid */
+  .dz .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:16px; }
+  .dz .card{ background:var(--panel); border:1px solid var(--hairline); border-radius:18px; padding:18px; cursor:pointer;
+    display:flex; flex-direction:column; box-shadow:var(--shadow); transition:transform .13s,box-shadow .13s,border-color .13s; text-align:left; font:inherit; color:inherit; position:relative; overflow:hidden; }
+  .dz .card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:color-mix(in srgb,var(--green) 45%,var(--hairline)); }
+  .dz .card .crow{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:14px; }
+  .dz .catpill{ font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; background:var(--panel-2); border-radius:20px; padding:4px 9px; }
+  .dz .conf{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:800; }
+  .dz .conf .bar{ width:24px; height:5px; border-radius:3px; background:var(--panel-2); overflow:hidden; }
+  .dz .conf .bar i{ display:block; height:100%; border-radius:3px; }
+  .dz .card .ico{ width:44px; height:44px; border-radius:12px; background:var(--panel-2); display:grid; place-items:center; margin-bottom:12px; color:var(--ink); }
+  .dz .card .ico svg{ width:24px; height:24px; }
+  .dz .card .brandname{ font-size:12px; color:var(--muted); margin:0 0 2px; font-weight:600; }
+  .dz .card .prodname{ font-size:15px; font-weight:720; letter-spacing:-.01em; margin:0 0 14px; line-height:1.25; }
+  .dz .card .savebig{ margin-top:auto; display:flex; align-items:baseline; gap:8px; }
+  .dz .card .savebig .amt{ font-size:30px; font-weight:880; letter-spacing:-.03em; color:var(--green); }
+  .dz .card .savebig .pct{ font-size:12.5px; font-weight:800; color:var(--green-strong); background:var(--green-soft); border-radius:8px; padding:3px 7px; }
+  .dz .card .prices{ margin-top:8px; font-size:13px; color:var(--muted); }
+  .dz .card .prices .was{ text-decoration:line-through; text-decoration-color:var(--alert); }
+  .dz .card .prices .now{ color:var(--ink); font-weight:700; }
+  .dz .card .golink{ margin-top:14px; display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:750; color:var(--green-strong); }
+  .dz .empty{ grid-column:1/-1; text-align:center; color:var(--muted); padding:50px 0; }
+
+  /* Modal */
+  .dz .backdrop{ position:fixed; inset:0; background:rgba(6,14,9,.55); backdrop-filter:blur(3px); z-index:60; display:flex; align-items:flex-start; justify-content:center; padding:5vh 16px; overflow-y:auto; opacity:0; pointer-events:none; transition:opacity .2s; }
+  .dz .backdrop.open{ opacity:1; pointer-events:auto; }
+  .dz .modal{ background:var(--panel); border:1px solid var(--hairline); border-radius:22px; box-shadow:var(--shadow-lg); max-width:640px; width:100%; padding:26px; transform:translateY(10px) scale(.99); transition:transform .2s; }
+  .dz .backdrop.open .modal{ transform:none; }
+  .dz .mhead{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:20px; }
+  .dz .mhead .brandname{ font-size:13px; color:var(--muted); margin:0 0 3px; font-weight:600; }
+  .dz .mhead .ptitle{ font-size:22px; font-weight:820; letter-spacing:-.02em; margin:0; line-height:1.12; }
+  .dz .closeb{ flex:none; width:34px; height:34px; border-radius:11px; border:1px solid var(--hairline); background:var(--panel-2); color:var(--ink); cursor:pointer; font-size:17px; display:grid; place-items:center; }
+  .dz .closeb:hover{ border-color:var(--green); color:var(--green-strong); }
+  .dz .savebanner{ display:flex; align-items:center; justify-content:space-between; gap:14px; background:var(--green); color:#04150C; border-radius:16px; padding:16px 20px; margin-bottom:18px; }
+  .dz .savebanner .amt{ font-size:30px; font-weight:880; letter-spacing:-.03em; }
+  .dz .savebanner .sub{ font-size:12.5px; font-weight:600; opacity:.82; text-align:right; }
+  .dz .compare{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  @media(max-width:560px){ .dz .compare{ grid-template-columns:1fr; } }
+  .dz .cbox{ border:1px solid var(--hairline); border-radius:15px; padding:16px; }
+  .dz .cbox.un{ border-color:color-mix(in srgb,var(--green) 50%,var(--hairline)); background:var(--green-soft); }
+  .dz .cbox .cap{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 9px; }
+  .dz .cbox .big{ font-size:26px; font-weight:850; letter-spacing:-.02em; }
+  .dz .cbox.brand .big{ color:var(--muted); text-decoration:line-through; text-decoration-color:var(--alert); text-decoration-thickness:2px; }
+  .dz .cbox.un .big{ color:var(--green-strong); }
+  .dz .cbox .alt{ font-size:12.5px; color:var(--ink); margin-top:8px; font-weight:600; }
+  .dz .cbox .rating{ font-size:12px; color:var(--muted); margin-top:3px; }
+  .dz .cbox .brandlink{ display:inline-block; margin-top:9px; font-size:11.5px; font-weight:600; color:var(--muted); text-decoration:underline; text-underline-offset:2px; }
+  .dz .cbox .brandlink:hover{ color:var(--ink); }
+  .dz .cbox .fine{ font-size:12px; color:var(--muted); margin-top:9px; line-height:1.5; }
+  .dz .cbox .fine .ln{ display:flex; justify-content:space-between; gap:8px; }
+  .dz .cbox .fine .ln.tot{ color:var(--ink); font-weight:700; border-top:1px solid var(--hairline); margin-top:5px; padding-top:5px; }
+  .dz .evidence{ border:1px solid var(--hairline); border-radius:15px; padding:16px; margin-bottom:16px; }
+  .dz .evidence .ehead{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .dz .evidence .ehead b{ font-size:13px; }
+  .dz .conftag{ font-size:12px; font-weight:800; }
+  .dz .confmeter{ height:7px; border-radius:5px; background:var(--panel-2); overflow:hidden; margin-bottom:10px; }
+  .dz .confmeter i{ display:block; height:100%; border-radius:5px; }
+  .dz .evidence .basis{ font-size:12.5px; color:var(--ink); margin:0 0 5px; font-weight:700; }
+  .dz .evidence .enote{ font-size:12.5px; color:var(--muted); margin:0; }
+  .dz .disclaim{ font-size:11.5px; color:var(--muted); background:var(--panel-2); border-radius:11px; padding:11px 13px; margin-bottom:16px; }
+  .dz .disclaim b{ color:var(--ink); }
+  .dz .mactions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .dz .buyb{ flex:1; min-width:200px; font:inherit; font-size:14px; font-weight:800; color:#04150C; background:var(--green); border:0; border-radius:13px; padding:14px 16px; cursor:pointer; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:7px; }
+  .dz .buyb:hover{ background:var(--green-strong); }
+  .dz .verify{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--muted); }
+  .dz .vbtns{ display:inline-flex; gap:5px; }
+  .dz .vbtn{ font:inherit; font-size:12.5px; font-weight:700; cursor:pointer; border:1px solid var(--hairline); background:var(--panel); color:var(--ink); border-radius:9px; padding:7px 11px; }
+  .dz .vbtn:hover{ border-color:var(--green); }
+  .dz .vbtn.on{ background:var(--green); color:#04150C; border-color:var(--green); }
+
+  /* Footer */
+  .dz .foot{ margin-top:56px; border-top:1px solid var(--hairline); padding:22px 0 46px; }
+  .dz .foot p{ font-size:11.5px; color:var(--muted); margin:0 auto 8px; max-width:82ch; line-height:1.6; }
+  .dz .foot b{ color:var(--ink); }
+
+  @media (prefers-reduced-motion:reduce){
+    .dz *{ animation:none !important; transition:none !important; }
+    .dz .pbrand.struck::after{ transform:scaleX(1); }
+    .dz .pun,.dz .saveline{ opacity:1; transform:none; }
+  }
+</style>
+
+<div class="dz">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="logo" aria-label="Debrand">
+        <svg class="tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 12V4a1 1 0 0 1 1-1h8a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        Debrand
+      </div>
+      <div class="searchbar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="dz-search" type="search" placeholder="What are you about to overpay for?" aria-label="Search products">
+      </div>
+      <button class="topcta" id="dz-topcta">Start saving</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">The brand tax, refunded</p>
+          <h1>Stop paying for the logo.<br>Keep the <span class="u">difference</span>.</h1>
+          <p class="lede">Most brands don't make anything — they buy a factory product, stamp a logo on it, and charge you many times more. We find the same unbranded product and link you straight to it.</p>
+          <div class="chips">
+            <span class="lbl">Try one:</span>
+            <button class="chip" data-jump="theragun">Theragun</button>
+            <button class="chip" data-jump="foreo">Foreo Luna</button>
+            <button class="chip" data-jump="dyson">Dyson Airwrap</button>
+            <button class="chip" data-jump="manscaped">Manscaped</button>
+          </div>
+        </div>
+        <div class="reveal" id="dz-reveal"></div>
+      </div>
+    </section>
+
+    <section class="statband" id="dz-statband"></section>
+
+    <section class="trust">
+      <div class="tcard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8 8 10 4.6-2 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+        <div><b>Verified matches</b><span>Every pairing is hand-checked and scored — we show the confidence, you decide.</span></div>
+      </div>
+      <div class="tcard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <div><b>Honest landed price</b><span>Item + shipping + any import fee — the real all-in cost, then the real saving.</span></div>
+      </div>
+      <div class="tcard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div><b>Similar, never "identical"</b><span>Genuine unbranded goods, no fake logos. We say "same OEM," and show the evidence.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="cat-head">
+        <h2>The un-branded catalog <span id="dz-count"></span></h2>
+        <div class="toolbar">
+          <div class="filters" id="dz-filters"></div>
+          <select class="sortsel" id="dz-sort" aria-label="Sort products">
+            <option value="save">Biggest saving</option>
+            <option value="pct">Biggest % off</option>
+            <option value="conf">Highest confidence</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid" id="dz-grid"></div>
+    </section>
+
+    <footer class="foot">
+      <p><b>Demo.</b> Comparisons are hand-verified illustrations; prices are approximate and current as of mid-2026. "Get the unbranded one" links open a real marketplace listing or search for the equivalent product — in the live product these become affiliate links. Debrand surfaces <b>genuine unbranded / OEM goods</b>, never counterfeits, and describes matches as <b>"similar to / same OEM,"</b> never "identical." No brand photography is used.</p>
+    </footer>
+  </div>
+
+  <div class="backdrop" id="dz-backdrop" role="dialog" aria-modal="true" aria-label="Product match details">
+    <div class="modal" id="dz-modal"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // Seed data — hand-verified illustrations; prices approx USD. alt* = the real unbranded product; url/search wired to live listings.
+  var DATA = [
+    {id:"manscaped", brand:"Manscaped", product:"The Lawn Mower 5.0 Ultra", cat:"Grooming", g:"grooming",
+     bp:110, src:"Amazon", up:39.99, ship:0, fee:0, conf:70, basis:"Matching specs & mold",
+     altBrand:"GLAKER", altTitle:"2-in-1 Ceramic & Foil Ball/Body Trimmer (IPX7)", altRating:4.0, altReviews:250,
+     url:"https://www.amazon.com/dp/B0CYSRYGTJ", q:"ball trimmer ceramic blade waterproof groin",
+     brandUrl:"https://www.manscaped.com/products/lawn-mower-5",
+     note:"Waterproof ceramic-blade body trimmers are a broad Shenzhen ODM category, and the dual-head trimmer+foil design mirrors the Lawn Mower 5.0 Ultra — but Manscaped's specific SkinSafe guard and QC aren't guaranteed on the generic."},
+    {id:"foreo", brand:"Foreo", product:"Luna 4", cat:"Skincare tools", g:"skincare",
+     bp:199, src:"Amazon", up:21.99, ship:0, fee:0, conf:70, basis:"Widely-reported dupe",
+     altBrand:"EZBASICS", altTitle:"Silicone Sonic Facial Cleansing Brush", altRating:4.3, altReviews:9000,
+     url:"https://www.amazon.com/dp/B088B6WCF1", q:"silicone sonic facial cleansing brush",
+     brandUrl:"https://www.foreo.com/luna-collection",
+     note:"Foreo's T-Sonic pulse and medical-grade silicone are cloned by the same device factories, and EZBASICS is the long-standing Luna-style generic — but motor amplitude, silicone grade and durability vary. A form-factor dupe, not a proven identical unit."},
+    {id:"theragun", brand:"Therabody", product:"Theragun Prime (Gen 6)", cat:"Wellness devices", g:"wellness",
+     bp:330, src:"Amazon", up:39.99, ship:0, fee:0, conf:80, basis:"Documented shared OEM factories",
+     altBrand:"TOLOCO", altTitle:"Massage Gun Deep Tissue EM26 (10 heads, brushless)", altRating:4.5, altReviews:45000,
+     url:"https://www.amazon.com/dp/B089KJTW4V", q:"deep tissue percussion massage gun",
+     brandUrl:"https://www.therabody.com/products/theragun-prime-gen-6-massage-gun",
+     note:"The best-documented OEM story: makers like SKG INNO openly OEM percussive guns for name brands, so cheap guns share motors and molds. TOLOCO's EM26 is the #1 best-seller (4.5★, 45k+) — though Theragun's proprietary motor and amplitude are a real step above the $40 tier."},
+    {id:"drgross", brand:"Dr. Dennis Gross", product:"SpectraLite FaceWare Pro", cat:"Skincare tools", g:"skincare",
+     bp:455, src:"Amazon", up:89.99, ship:0, fee:0, conf:65, basis:"Same category, different internals",
+     altBrand:"INIA", altTitle:"Red/Blue LED Light Therapy Mask (220 LEDs, 850nm NIR)", altRating:4.3, altReviews:1000,
+     url:"https://www.amazon.com/dp/B0F18BBHCC", q:"red blue LED light therapy face mask",
+     brandUrl:"https://www.drdennisgross.com/drx-spectralite-faceware-pro-3-minute-led-device/695866568117.html",
+     note:"LED masks are heavily OEM'd out of Guangdong and the shells look near-identical, but LED count, actual irradiance (dose) and FDA clearance differ — the generic often under-delivers the therapeutic dose despite looking the same."},
+    {id:"revlon", brand:"Revlon", product:"One-Step Volumizer", cat:"Hair tools", g:"hair",
+     bp:45, src:"Amazon", up:36.99, ship:0, fee:0, conf:78, basis:"Matching specs & mold",
+     altBrand:"Wavytalk", altTitle:"3-in-1 Oval Hot-Air Volumizer Brush", altRating:4.4, altReviews:900,
+     url:"https://www.amazon.com/dp/B09CG5G2VK", q:"one step hair dryer volumizer oval brush",
+     brandUrl:"https://www.revlonhairtools.com/dryers/salon-one-step-hair-dryer-and-volumizer/",
+     note:"One of the most-copied tools ever — same oval-barrel mold and ceramic plate. Honest caveat: the Revlon original is itself budget-priced (~$35–45), so this is a like-priced generic-brand alternative, not a big discount. It's here to keep the set honest."},
+    {id:"waterpik", brand:"Waterpik", product:"Cordless Advanced 2.0", cat:"Wellness devices", g:"wellness",
+     bp:100, src:"Amazon", up:29.99, ship:0, fee:0, conf:74, basis:"Matching specs & mold",
+     altBrand:"COSLUS", altTitle:"ADA-Accepted Cordless Water Flosser C20 (IPX7)", altRating:4.4, altReviews:42000,
+     url:"https://www.amazon.com/dp/B0BG52SJ5N", q:"cordless water flosser",
+     brandUrl:"https://www.waterpik.com/products/dental-water-flosser/WP-580/",
+     note:"Cordless flossers are a commoditized pump-and-reservoir design and the COSLUS C20 is ADA-accepted with comparable PSI/pulse specs — though Waterpik's tip seal and pump longevity are the real differentiators."},
+    {id:"dyson", brand:"Dyson", product:"Airwrap (Complete Long)", cat:"Hair tools", g:"hair",
+     bp:600, src:"Amazon", up:69.99, ship:0, fee:0, conf:52, basis:"Same category, different internals",
+     altBrand:"Wavytalk", altTitle:"5-in-1 Hot-Air Multi-Styler Set", altRating:4.4, altReviews:1500,
+     url:"https://www.amazon.com/dp/B0D7HGNMZ1", q:"5 in 1 hot air brush multi styler",
+     brandUrl:"https://www.dyson.com/hair-care/hair-stylers/airwrap",
+     note:"Honestly weak: this multi-styler mimics the attachments, but it uses heat, not Dyson's Coanda auto-wrap airflow — results and safety genuinely differ. The closest true-Coanda option is the Shark FlexStyle (a brand, ~$280), not the $70 styler."},
+    {id:"beautyblender", brand:"Beautyblender", product:"Original Sponge", cat:"Beauty", g:"beauty",
+     bp:20, src:"Amazon", up:8.99, ship:0, fee:0, conf:68, basis:"Visually identical / shared photos",
+     altBrand:"BEAKEY", altTitle:"Makeup Sponge Set, 5-pack (latex-free)", altRating:4.5, altReviews:140000,
+     url:"https://www.amazon.com/dp/B01F36JEXE", q:"makeup blender sponge set latex free",
+     brandUrl:"https://beautyblender.com/products/beautyblender-original",
+     note:"The egg shape is trivially copied and BEAKEY's 5-pack (140k+ reviews) costs less than $2 a sponge — but the original's aqua-activated foam is genuinely softer and longer-lasting; reviewers find generics firmer and shorter-lived."},
+    {id:"guasha", brand:"Mount Lai", product:"Jade Gua Sha", cat:"Beauty", g:"beauty",
+     bp:30, src:"Amazon", up:9.99, ship:0, fee:0, conf:90, basis:"Documented same stone workshops",
+     altBrand:"BAIMEI", altTitle:"IcyMe Xiuyan-Jade Gua Sha Facial Tool", altRating:4.5, altReviews:3000,
+     url:"https://www.amazon.com/dp/B091P2XHXB", q:"jade gua sha facial tool",
+     brandUrl:"https://www.mountlai.com/products/the-jade-gua-sha-tool",
+     note:"Among the strongest matches: the same carved-stone commodity from the same workshops (bulk units cost cents), and published research found tool material barely affects results — you're mostly paying for branding and packaging."},
+    {id:"slip", brand:"Slip", product:"Pure Silk Queen Pillowcase", cat:"Beauty", g:"beauty",
+     bp:120, src:"Amazon", up:25.99, ship:0, fee:0, conf:88, basis:"Identical published spec",
+     altBrand:"MommeSilk", altTitle:"22-Momme Grade-6A Mulberry Silk Pillowcase", altRating:4.5, altReviews:9000,
+     url:"https://www.amazon.com/dp/B07VT43W4B", q:"22 momme mulberry silk pillowcase grade 6a",
+     brandUrl:"https://www.slip.com/products/pillowcase-white-queen-zippered",
+     note:"Strong and easy to verify — Slip and MommeSilk publish the same spec (100% mulberry silk, 22 momme, Grade 6A), so on paper it's the same textile; Slip's edge is finishing, QC and the name, not the silk grade."},
+    {id:"nuface", brand:"NuFACE", product:"Trinity+ Starter Kit", cat:"Skincare tools", g:"skincare",
+     bp:395, src:"Amazon", up:35.99, ship:0, fee:0, conf:58, basis:"Same category, different internals",
+     altBrand:"Generic", altTitle:"Microcurrent Face & Neck Toning Device", altRating:null, altReviews:null,
+     url:"https://www.amazon.com/dp/B0CYZCVYQV", q:"microcurrent facial toning device face neck",
+     brandUrl:"https://www.mynuface.com/products/trinity-plus-complete-set-microcurrent-facial-toning-device-kit",
+     note:"Honestly the weakest match — generics deliver 'microcurrent' but the actual output (µA), waveform and FDA clearance vary widely, and NuFACE's calibrated current is a real part of what you pay for. Few verified reviews on the generic; check the listing."},
+    {id:"pmd", brand:"PMD Beauty", product:"Personal Microderm Classic", cat:"Skincare tools", g:"skincare",
+     bp:159, src:"Amazon", up:59.99, ship:0, fee:0, conf:72, basis:"Matching specs & mold",
+     altBrand:"NEWDERMO", altTitle:"2-in-1 Diamond-Tip Microdermabrasion Device", altRating:4.2, altReviews:3000,
+     url:"https://www.amazon.com/dp/B086X6BNLX", q:"diamond microdermabrasion machine at home",
+     brandUrl:"https://pmdbeauty.com/products/pmd-personal-microderm",
+     note:"Diamond-tip + suction microderm wands are a broad OEM category with near-identical hardware; PMD uses a spinning disc + suction and NEWDERMO uses a diamond tip + suction — same at-home category, and the mechanism is genuinely comparable."},
+    {id:"hismile", brand:"Hismile", product:"LED Teeth Whitening Kit", cat:"Beauty", g:"beauty",
+     bp:60, src:"Amazon", up:29.99, ship:0, fee:0, conf:85, basis:"Documented same OEM; commodity tray",
+     altBrand:"Auraglow", altTitle:"LED Teeth Whitening Kit (20+ treatments)", altRating:4.1, altReviews:45000,
+     url:"https://www.amazon.com/dp/B00YI5VJW6", q:"led teeth whitening kit",
+     brandUrl:"https://us.hismileteeth.com/collections/pap-collection/",
+     note:"The blue-LED tray is a pure commodity (Auraglow: 4.1★, 45k+ reviews). One honest difference: Hismile is peroxide-free PAP+, while Auraglow uses carbamide peroxide — same LED-kit hardware, different gel chemistry, so pick by which whitening agent you want."},
+    {id:"braun", brand:"Braun", product:"Silk-expert Pro 5 IPL", cat:"Grooming", g:"grooming",
+     bp:399, src:"Amazon", up:69.99, ship:0, fee:0, conf:48, basis:"Same category, different internals",
+     altBrand:"INNZA", altTitle:"IPL Hair Removal Handset (ice-cooling, 9 levels)", altRating:4.2, altReviews:2000,
+     url:"https://www.amazon.com/dp/B0CWL9S4L1", q:"IPL hair removal handset at home",
+     brandUrl:"https://www.braun.com/en-us/female-hair-removal/ipl-permanent-visible-hair-removal",
+     note:"Deliberately weak: generic IPL handsets share the form factor but lack Braun's SkinProtect tone sensor, lamp quality and flash consistency — a 'looks similar, works meaningfully worse / less safely' case. Verify carefully before trusting it on skin."},
+    {id:"solawave", brand:"Solawave", product:"4-in-1 Radiant Renewal Wand", cat:"Skincare tools", g:"skincare",
+     bp:169, src:"Amazon", up:39.99, ship:0, fee:0, conf:82, basis:"Direct A/B tests — same components",
+     altBrand:"Generic", altTitle:"4-in-1 Red-Light + Microcurrent Skincare Wand", altRating:null, altReviews:null,
+     url:"https://www.amazon.com/dp/B0D22Y4MWH", q:"red light therapy microcurrent wand face",
+     brandUrl:"https://www.solawave.co/products/radiant-renewal-skincare-wand-with-red-light-therapy",
+     note:"Strongly documented — reviewers directly A/B'd Solawave against near-identical sub-$40 wands and found the same red-light/microcurrent/warmth components. Few verified reviews on this exact generic listing; check the page before buying."}
+  ];
+
+  var CATS = ["All","Skincare tools","Hair tools","Grooming","Wellness devices","Beauty"];
+  var ICONS = {
+    skincare:'<path d="M12 3c1.5 0 3 1 3 3s-1.5 3-3 3-3-1-3-3 1.5-3 3-3z"/><path d="M12 9v12"/><path d="M9 21h6"/>',
+    hair:'<path d="M4 8a5 5 0 0 1 5-5h1v10H9a5 5 0 0 1-5-5z"/><path d="M10 8h10"/><path d="M15 8v11l3 2"/>',
+    grooming:'<rect x="5" y="3" width="14" height="8" rx="2"/><path d="M8 11v3M12 11v4M16 11v3"/><path d="M10 17h4v4h-4z"/>',
+    wellness:'<path d="M3 12h4l2-6 4 12 2-6h6"/>',
+    beauty:'<path d="M12 3c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9z"/>'
+  };
+  function icon(g){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[g]||ICONS.beauty)+'</svg>'; }
+  function confColor(c){ return c>=85?'var(--green)':c>=75?'var(--green-strong)':c>=68?'#C6902A':'var(--alert)'; }
+  function landed(d){ return d.up+d.ship+d.fee; }
+  function saving(d){ return d.bp-landed(d); }
+  function savePct(d){ return Math.round(saving(d)/d.bp*100); }
+  function m(n){ return '$'+Math.round(n); }
+  function enc(s){ return encodeURIComponent(s); }
+  function altHref(d){
+    if(d.url) return d.url;
+    if(d.src==="Amazon") return "https://www.amazon.com/s?k="+enc(d.q);
+    return "https://www.aliexpress.com/wholesale?SearchText="+enc(d.q);
+  }
+  function brandHref(d){ return d.brandUrl || "https://www.google.com/search?q="+enc(d.brand+" "+d.product); }
+
+  var state = { cat:"All", sort:"save", q:"" };
+  var verified = {};
+
+  // ---- Hero reveal (feature the biggest credible saving) ----
+  function renderReveal(){
+    var d = DATA.filter(function(x){return x.id==="theragun";})[0];
+    var el = document.getElementById("dz-reveal");
+    el.innerHTML =
+      '<div class="tagrow"><div class="prod-ico">'+icon(d.g)+'</div>'
+      + '<span class="stamp"><span class="dotk"></span>'+d.conf+'% same OEM</span></div>'
+      + '<p class="pname">'+d.brand+'</p><p class="ptitle">'+d.product+'</p>'
+      + '<div class="priceflip"><div class="pcol"><p class="cap">The brand charges</p><span class="pbrand struck mono">'+m(d.bp)+'</span></div>'
+      + '<span class="arrow">→</span>'
+      + '<div class="pcol"><p class="cap">Same product, landed</p><span class="pun mono">'+m(landed(d))+'</span></div></div>'
+      + '<div class="saveline"><span class="saveseal"><span class="big mono">'+m(saving(d))+'</span><span class="lil">you keep</span></span>'
+      + '<span class="txt">That’s <b>'+savePct(d)+'% of the price</b> that was just the logo.</span></div>'
+      + '<button class="revealbtn" id="dz-revealbtn">Show the factory price</button>';
+    document.getElementById("dz-revealbtn").addEventListener("click", function(){ el.classList.add("done"); });
+  }
+
+  // ---- Stat band ----
+  function renderStats(){
+    var total = DATA.reduce(function(s,d){ return s+saving(d); },0);
+    var avgPct = Math.round(DATA.reduce(function(s,d){ return s+savePct(d); },0)/DATA.length);
+    var max = DATA.reduce(function(a,b){ return saving(b)>saving(a)?b:a; });
+    document.getElementById("dz-statband").innerHTML =
+      '<div class="stat lead"><div class="n mono"><em>'+m(total)+'</em></div><div class="l">of brand tax across these '+DATA.length+' everyday products</div></div>'
+      + '<div class="stat"><div class="n mono">'+avgPct+'%</div><div class="l">average saving vs the brand</div></div>'
+      + '<div class="stat"><div class="n mono">'+m(saving(max))+'</div><div class="l">biggest single saving ('+max.brand+')</div></div>';
+  }
+
+  // ---- Filters ----
+  function renderFilters(){
+    var box = document.getElementById("dz-filters");
+    box.innerHTML = CATS.map(function(c){ return '<button class="fbtn" data-cat="'+c+'" aria-pressed="'+(state.cat===c)+'">'+c+'</button>'; }).join("");
+    box.querySelectorAll(".fbtn").forEach(function(b){
+      b.addEventListener("click", function(){ state.cat=b.getAttribute("data-cat"); renderFilters(); renderGrid(); });
+    });
+  }
+
+  // ---- Grid ----
+  function currentList(){
+    var list = DATA.filter(function(d){
+      var okCat = state.cat==="All" || d.cat===state.cat;
+      var q = state.q.trim().toLowerCase();
+      var okQ = !q || (d.brand+" "+d.product+" "+d.cat+" "+d.altTitle).toLowerCase().indexOf(q)>=0;
+      return okCat && okQ;
+    });
+    list.sort(function(a,b){
+      if(state.sort==="save") return saving(b)-saving(a);
+      if(state.sort==="pct") return savePct(b)-savePct(a);
+      return b.conf-a.conf;
+    });
+    return list;
+  }
+  function renderGrid(){
+    var list = currentList();
+    var grid = document.getElementById("dz-grid");
+    document.getElementById("dz-count").textContent = "· "+list.length+" of "+DATA.length;
+    if(!list.length){ grid.innerHTML='<div class="empty">No matches — try another brand or clear the search.</div>'; return; }
+    grid.innerHTML = list.map(function(d){
+      return '<button class="card" data-id="'+d.id+'">'
+        + '<div class="crow"><span class="catpill">'+d.cat+'</span>'
+        + '<span class="conf" style="color:'+confColor(d.conf)+'"><span class="bar"><i style="width:'+d.conf+'%;background:'+confColor(d.conf)+'"></i></span>'+d.conf+'%</span></div>'
+        + '<div class="ico">'+icon(d.g)+'</div>'
+        + '<p class="brandname">'+d.brand+'</p><p class="prodname">'+d.product+'</p>'
+        + '<div class="savebig"><span class="amt mono">'+m(saving(d))+'</span><span class="pct">SAVE '+savePct(d)+'%</span></div>'
+        + '<div class="prices"><span class="was mono">'+m(d.bp)+'</span> → <span class="now mono">'+m(landed(d))+' landed</span></div>'
+        + '<span class="golink">Get the unbranded one'
+        + ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'
+        + '</button>';
+    }).join("");
+    grid.querySelectorAll(".card").forEach(function(c){
+      c.addEventListener("click", function(){ openModal(c.getAttribute("data-id")); });
+    });
+  }
+
+  // ---- Modal ----
+  var backdrop = document.getElementById("dz-backdrop");
+  var modal = document.getElementById("dz-modal");
+  function stars(r){ var full=Math.round(r); var s=""; for(var i=0;i<5;i++){ s+= i<full?"★":"☆"; } return s; }
+  function openModal(id){
+    var d = DATA.filter(function(x){return x.id===id;})[0]; if(!d) return;
+    var ratingHtml = d.altRating
+      ? ('<div class="rating">'+stars(d.altRating)+' '+d.altRating.toFixed(1)+' · '+(d.altReviews>=1000?(Math.round(d.altReviews/1000)+"k"):d.altReviews)+' ratings</div>')
+      : '<div class="rating">Newer / low-review listing — check the page before buying</div>';
+    var brandLink = '<a class="brandlink" href="'+brandHref(d)+'" target="_blank" rel="noopener nofollow">see it on '+d.brand+' ↗</a>';
+    modal.innerHTML =
+      '<div class="mhead"><div><p class="brandname">'+d.brand+'</p><h3 class="ptitle">'+d.product+'</h3></div>'
+      + '<button class="closeb" id="dz-close" aria-label="Close">✕</button></div>'
+      + '<div class="savebanner"><div class="amt mono">Save '+m(saving(d))+'</div>'
+      + '<div class="sub">'+savePct(d)+'% off the brand price<br>on a single purchase</div></div>'
+      + '<div class="compare">'
+      + '<div class="cbox brand"><p class="cap">The brand asks</p><div class="big mono">'+m(d.bp)+'</div>'
+      + '<div class="fine">You’re paying extra for marketing, packaging, retail margin, and the name.</div>'+brandLink+'</div>'
+      + '<div class="cbox un"><p class="cap">The equivalent · '+d.src+'</p><div class="big mono">'+m(landed(d))+'</div>'
+      + '<div class="alt">'+d.altBrand+' — '+d.altTitle+'</div>'
+      + ratingHtml
+      + '<div class="fine"><div class="ln"><span>Item</span><span class="mono">'+m(d.up)+'</span></div>'
+      + '<div class="ln"><span>Shipping</span><span class="mono">'+(d.ship?m(d.ship):'Free')+'</span></div>'
+      + '<div class="ln"><span>Est. import/handling</span><span class="mono">'+(d.fee?m(d.fee):'—')+'</span></div>'
+      + '<div class="ln tot"><span>Landed</span><span class="mono">'+m(landed(d))+'</span></div></div></div></div>'
+      + '<div class="evidence"><div class="ehead"><b>Why we think it’s the same product</b>'
+      + '<span class="conftag" style="color:'+confColor(d.conf)+'">'+d.conf+'% confidence</span></div>'
+      + '<div class="confmeter"><i style="width:'+d.conf+'%;background:'+confColor(d.conf)+'"></i></div>'
+      + '<p class="basis">'+d.basis+'</p><p class="enote">'+d.note+'</p></div>'
+      + '<div class="disclaim"><b>Similar to — not identical.</b> This is a genuine unbranded product, not a counterfeit. '
+      + 'Quality can vary, so check the specs and reviews before buying.</div>'
+      + '<div class="mactions"><a class="buyb" href="'+altHref(d)+'" target="_blank" rel="noopener nofollow">Get the unbranded one on '+d.src
+      + ' <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>'
+      + '<div class="verify">Same product? <span class="vbtns">'
+      + '<button class="vbtn" data-v="yes">✓ Yes</button><button class="vbtn" data-v="no">✕ No</button></span></div></div>';
+    backdrop.classList.add("open");
+    document.body.style.overflow="hidden";
+    document.getElementById("dz-close").addEventListener("click", closeModal);
+    modal.querySelectorAll(".vbtn").forEach(function(b){
+      b.addEventListener("click", function(){
+        modal.querySelectorAll(".vbtn").forEach(function(x){x.classList.remove("on");});
+        b.classList.add("on"); verified[id]=b.getAttribute("data-v")==="yes";
+        b.closest(".verify").childNodes[0].textContent = verified[id]? "Thanks — logged. " : "Noted — thanks. ";
+      });
+    });
+  }
+  function closeModal(){ backdrop.classList.remove("open"); document.body.style.overflow=""; }
+  backdrop.addEventListener("click", function(e){ if(e.target===backdrop) closeModal(); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeModal(); });
+
+  // ---- Search + chips ----
+  document.getElementById("dz-search").addEventListener("input", function(){ state.q=this.value; renderGrid(); });
+  document.getElementById("dz-sort").addEventListener("change", function(){ state.sort=this.value; renderGrid(); });
+  document.getElementById("dz-topcta").addEventListener("click", function(){ document.querySelector(".cat-head").scrollIntoView({behavior:"smooth",block:"start"}); });
+  document.querySelectorAll(".chip").forEach(function(c){
+    c.addEventListener("click", function(){ openModal(c.getAttribute("data-jump")); });
+  });
+
+  renderReveal();
+  renderStats();
+  renderFilters();
+  renderGrid();
+})();
+</script>
+
+</body>
+</html>
